@@ -1,9 +1,19 @@
+project(mnist_tests C)
+
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_C_STANDARD 23)
+
+set(project_name mnist_tests)
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_LIST_DIR})
-add_executable(mnist_tests
+
+add_executable(${project_name}
                mnist_tests.c
                ../src/load_mnist.c)
-target_include_directories(mnist_tests PRIVATE ../src)
-target_link_libraries(mnist_tests cmocka)
+
+target_include_directories(${project_name} PRIVATE ../src)
+target_link_libraries(${project_name} cmocka)
 
 enable_testing()
-add_test(NAME LoadMnist COMMAND mnist_tests 1)
+add_test(NAME LoadMnist COMMAND ${project_name} 1)

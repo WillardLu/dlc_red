@@ -17,23 +17,23 @@
 #include "../src/load_mnist.h"
 
 static void LoadMnistTest(void **state) {
+  // 为测试准备测试数据
   struct Mnist test_data = {NULL, NULL, NULL, false};
-  char image_file[] = "train-images.idx3-ubyte";
-  char label_file[] = "train-labels.idx1-ubyte";
+  char dir[] = "";
+  static float image[60000 * 784];
+  int8_t label[60000];
+  uint8_t one_hot_label[60000 * 10] = {0};
 
-  test_data.image = (float *)malloc(sizeof(float) * 60000 * 784);
-  test_data.label = (uint8_t *)malloc(sizeof(uint8_t) * 60000);
-  test_data.one_hot_label = (uint8_t *)calloc(60000 * 10, sizeof(uint8_t));
+  test_data.image = image;
+  test_data.label = label;
+  test_data.one_hot_label = one_hot_label;
   if (test_data.image == NULL || test_data.label == NULL ||
     test_data.one_hot_label == NULL) {
-    free(test_data.image);
-    free(test_data.label);
-    free(test_data.one_hot_label);
     printf("测试数据申请内存失败。\n");
     return;
   }
   // normalize为假时
-  if (LoadMnist(&test_data, image_file, label_file) == 0) {
+  if (LoadMnist(&test_data, dir) == 0) {
     assert_int_equal(test_data.image[152], 3);
     assert_int_equal(test_data.label[0], 5);
     assert_int_equal(test_data.one_hot_label[5], 1);
@@ -42,16 +42,13 @@ static void LoadMnistTest(void **state) {
   }
   test_data.normalize = true;
   // normalize为真时
-  if (LoadMnist(&test_data, image_file, label_file) == 0) {
+  if (LoadMnist(&test_data, dir) == 0) {
     assert_int_equal(test_data.image[152], 0.011764);
     assert_int_equal(test_data.label[28737], 9);
     assert_int_equal(test_data.one_hot_label[28737*10+9], 1);
   } else {
     printf("LoadMnist函数执行失败。\n");
   }
-  free(test_data.image);
-  free(test_data.label);
-  free(test_data.one_hot_label);
   return;
 }
 

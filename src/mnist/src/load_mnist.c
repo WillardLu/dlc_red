@@ -11,8 +11,7 @@
 
 /// @brief 载入训练数据
 /// @param train_data 要载入的训练数据结构
-/// @param image_file 图像文件名称
-/// @param label_file 标签文件名称
+/// @param dir 文件所在目录（相对于执行位置）
 /// @return 成功: 0；失败：-1
 int LoadMnist(struct Mnist *train_data, char *dir) {
   FILE *fp_image = NULL;
@@ -33,13 +32,9 @@ int LoadMnist(struct Mnist *train_data, char *dir) {
     printf("图像训练数据文件打开失败。\n");
     return -1;
   }
-  uint8_t *image = NULL; // 用于中转图像数据的数组  
-  image = (uint8_t *)malloc(sizeof(uint8_t) * 60000 * 784);
-  if ( image == NULL ) {
-    printf("用于中转图像数据的数组内存分配失败！\n");
-    fclose(fp_image);
-    return -1;
-  }
+  
+  static uint8_t image[60000 * 784]; // 用于中转图像数据的数组
+
   fseek(fp_image, 16, SEEK_SET); // 跳过文件头部的非数据区
   fread(image, 1, 60000 * 784, fp_image);
   fclose(fp_image);
@@ -48,7 +43,6 @@ int LoadMnist(struct Mnist *train_data, char *dir) {
   for (int i = 0; i < 60000 * 784; i++) {
     train_data->image[i] = image[i] / normalize;
   }
-  free(image);
   // 读取label_file文件的内容
   fp_label = fopen(label_file, "rb");
   if (fp_label == NULL) {
