@@ -58,3 +58,43 @@ int LoadMnist(struct Mnist *train_data, char *dir) {
   }
   return 0;
 }
+
+/// @brief 随机取样
+/// @param train_data 要随机取样的数据集
+/// @param data_amount 数据集中的数据数量
+/// @param image_res 图片精度
+/// @param batch_size 每次取的图片数量
+/// @param x_batch 存放取样的图片数据
+/// @param y_batch 存放取样的标签数据
+void RandomSampling(struct Mnist *train_data, int data_amount, int image_res,
+  int batch_size, float *x_batch, uint8_t *t_batch) {
+  for (int i = 0; i < batch_size; i++) {
+    srand(rand() * (unsigned int)time(NULL));
+    int sample_index = rand() % data_amount;
+    for (int k = 0; k < image_res; k++) {
+      x_batch[i * image_res + k] =
+        train_data->image[sample_index * image_res + k];
+    }
+    for (int k = 0; k < 10; k++) {
+      t_batch[i * 10 + k] =
+        train_data->one_hot_label[sample_index * 10 + k];
+    }
+  }
+  return;
+}
+
+/// @brief 从数据集中读取一张图片的数据
+/// @param x_batch 图片数据集（本项目中指的是随机抽样的图片数据集）
+/// @param t_batch 标签数据集（本项目中指的是随机抽样的标签数据集）
+/// @param nn 两层神经网络结构体
+/// @param site 在数据集中的位置
+void ReadOnePic(float *x_batch, uint8_t *t_batch,
+  struct TwoLayerNeuralNetwork * nn, int site) {
+  for (int i = 0; i < 784; i++) {
+    nn->x[i] = x_batch[site * 784 + i];
+  }
+  for (int i = 0; i < 10; i++) {
+    nn->t[i] = t_batch[site * 10 + i];
+  }
+  return;
+}
