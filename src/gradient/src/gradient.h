@@ -6,8 +6,8 @@
 /// @author 陆巍
 /// @date 2023-04-27
 /// -----------------------------------------------------------------
-#ifndef GRADIENT_SRC_NUMERICAL_DIFFERENTIATION_H_
-#define GRADIENT_SRC_NUMERICAL_DIFFERENTIATION_H_
+#ifndef GRADIENT_SRC_GRADIENT_H_
+#define GRADIENT_SRC_GRADIENT_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -45,4 +45,6 @@ float CrossEntropyError(struct TwoLayerNeuralNetwork * nn);
 
 void NumericalDifferentiation(struct TwoLayerNeuralNetwork *nn);
 
-#endif  // GRADIENT_SRC_NUMERICAL_DIFFERENTIATION_H_
+void UpdateParam(struct TwoLayerNeuralNetwork * nn, float learning_rate);
+
+#endif  // GRADIENT_SRC_GRADIENT_H_

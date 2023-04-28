@@ -411,3 +411,22 @@ void NumericalDifferentiation(struct TwoLayerNeuralNetwork *nn) {
   }
   return;
 }
+
+/// @brief 根据梯度方向更新参数
+/// @param nn 两层神经网络结构体
+/// @param learning_rate 学习率
+void UpdateParam(struct TwoLayerNeuralNetwork * nn, float learning_rate) {
+  for (int k = 0; k < 39200; k++) {
+    nn->w1[k] -= learning_rate * nn->w1_g[k];
+  }
+  for (int k = 0; k < 50; k++) {
+    nn->b1[k] -= learning_rate * nn->b1_g[k];
+  }
+  for (int k = 0; k < 500; k++) {
+    nn->w2[k] -= learning_rate * nn->w2_g[k];
+  }
+  for (int k = 0; k < 10; k++) {
+    nn->b2[k] -= learning_rate * nn->b2_g[k];
+  }
+  return;
+}
