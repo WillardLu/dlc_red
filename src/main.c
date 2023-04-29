@@ -76,10 +76,10 @@ int main(int argc, char *argv[]) {
   // 误差总和
   float sum_y = 0;
   // 用于保存到文件的误差数据的字符串
-  char study_records[40000] = "x,y\xA";
+  char study_records[400000] = "x,y\xA";
   char per_record[100] = {0};
   // 用于保存精度数据的字符串
-  char accuracy_records[40000] = "x,y1,y2\xA 0,0,0\xA";
+  char accuracy_records[400000] = "x,y1,y2\xA 0,0,0\xA";
   char per_test_record[100] = {0};
   float train_acc = 0;
   float test_acc = 0;
@@ -113,7 +113,8 @@ int main(int argc, char *argv[]) {
     if ((i + 1) % iter_per_epoch == 0) {
       train_acc = Accuracy(&nn, train_data.image, train_data.one_hot_label, 60000);
       test_acc = Accuracy(&nn, train_data.image_t, train_data.one_hot_label_t, 10000);
-      sprintf(per_test_record, "%d,%.4f,%.4f\xA", (int)(i / iter_per_epoch) + 1, train_acc, test_acc);
+      sprintf(per_test_record, "%d,%.4f,%.4f\xA", (int)(i / iter_per_epoch) + 1,
+        train_acc, test_acc);
       strcat(accuracy_records, per_test_record);
     }
   }

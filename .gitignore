@@ -1,4 +1,5 @@
 build/
+bin/
 src/mnist/build/
 src/initialization_parameters/build/
 src/initialization_parameters/.vscode/
