@@ -19,9 +19,14 @@
 #ifndef STRUCT_MNIST_
 #define STRUCT_MNIST_
 struct Mnist {
+  // 训练数据
   float *image;
   uint8_t *label;
   uint8_t *one_hot_label;
+  // 测试数据
+  float *image_t;
+  uint8_t *label_t;
+  uint8_t *one_hot_label_t;
   _Bool normalize;
 };
 #endif  // STRUCT_MNIST_

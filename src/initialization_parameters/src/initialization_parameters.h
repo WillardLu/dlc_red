@@ -6,8 +6,8 @@
 /// @author 陆巍
 /// @date 2023-04-27
 /// -----------------------------------------------------------------
-#ifndef MNIST_SRC_LOAD_MNIST_H_
-#define MNIST_SRC_LOAD_MNIST_H_
+#ifndef INITIALIZATION_PARAMETERS_SRC_INITIALIZATION_PARAMETERS_H_
+#define INITIALIZATION_PARAMETERS_SRC_INITIALIZATION_PARAMETERS_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -42,4 +42,4 @@ struct TwoLayerNeuralNetwork {
 void InitWeight(struct TwoLayerNeuralNetwork * nn, float min, float max,
   float weight_init_std);
 
-#endif  // MNIST_SRC_LOAD_MNIST_H_
+#endif  // INITIALIZATION_PARAMETERS_SRC_INITIALIZATION_PARAMETERS_H_

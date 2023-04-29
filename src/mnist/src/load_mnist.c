@@ -16,17 +16,26 @@
 int LoadMnist(struct Mnist *train_data, char *dir) {
   FILE *fp_image = NULL;
   FILE *fp_label = NULL;
+  FILE *fp_image_t = NULL;
+  FILE *fp_label_t = NULL;
   char image_file[100] = {0};
   char label_file[100] = {0};
+  char image_file_t[100] = {0};
+  char label_file_t[100] = {0};
 
   // 如果没有输入命令行参数，会造成内存出错，所以加上此判断。
   if (dir != NULL) {
     strcat(image_file, dir);
     strcat(label_file, dir);
+    strcat(image_file_t, dir);
+    strcat(label_file_t, dir);
   }
   strcat(image_file, "train-images.idx3-ubyte");
   strcat(label_file, "train-labels.idx1-ubyte");
-  // 读取image_file文件的内容
+  strcat(image_file_t, "t10k-images.idx3-ubyte");
+  strcat(label_file_t, "t10k-labels.idx1-ubyte");
+
+  // 1、读取训练数据集中的图像数据
   fp_image = fopen(image_file, "rb");
   if (fp_image == NULL) {
     printf("图像训练数据文件打开失败。\n");
@@ -43,7 +52,7 @@ int LoadMnist(struct Mnist *train_data, char *dir) {
   for (int i = 0; i < 60000 * 784; i++) {
     train_data->image[i] = image[i] / normalize;
   }
-  // 读取label_file文件的内容
+  // 2、读取训练数据集中的标签数据
   fp_label = fopen(label_file, "rb");
   if (fp_label == NULL) {
     printf("标签训练数据文件打开失败。\n");
@@ -55,6 +64,36 @@ int LoadMnist(struct Mnist *train_data, char *dir) {
   // 将标签转换成one hot形式，并保存到数组中
   for (int i = 0; i < 60000; i++) {
     train_data->one_hot_label[i * 10 + train_data->label[i]] = 1;
+  }
+
+  // 3、读取测试数据集中的图像数据
+  fp_image_t = fopen(image_file_t, "rb");
+  if (fp_image_t == NULL) {
+    printf("图像测试数据文件打开失败。\n");
+    return -1;
+  }
+  
+  static uint8_t image_t[10000 * 784]; // 用于中转图像数据的数组
+
+  fseek(fp_image_t, 16, SEEK_SET); // 跳过文件头部的非数据区
+  fread(image_t, 1, 10000 * 784, fp_image_t);
+  fclose(fp_image_t);
+  // 根据normalize值转换图像数据
+  for (int i = 0; i < 10000 * 784; i++) {
+    train_data->image_t[i] = image_t[i] / normalize;
+  }
+  // 4、读取测试数据集中的标签数据
+  fp_label_t = fopen(label_file_t, "rb");
+  if (fp_label_t == NULL) {
+    printf("标签测试数据文件打开失败。\n");
+    return -1;
+  }
+  fseek(fp_label_t, 8, SEEK_SET); // 跳过文件头部的非数据区
+  fread(train_data->label_t, sizeof(uint8_t), 10000, fp_label_t);
+  fclose(fp_label_t);
+  // 将标签转换成one hot形式，并保存到数组中
+  for (int i = 0; i < 10000; i++) {
+    train_data->one_hot_label_t[i * 10 + train_data->label_t[i]] = 1;
   }
   return 0;
 }

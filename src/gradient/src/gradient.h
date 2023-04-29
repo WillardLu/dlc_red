@@ -47,4 +47,7 @@ void NumericalDifferentiation(struct TwoLayerNeuralNetwork *nn);
 
 void UpdateParam(struct TwoLayerNeuralNetwork * nn, float learning_rate);
 
+float Accuracy(struct TwoLayerNeuralNetwork *nn, float *image, uint8_t *label,
+  int size);
+
 #endif  // GRADIENT_SRC_GRADIENT_H_

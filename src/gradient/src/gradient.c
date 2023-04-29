@@ -430,3 +430,43 @@ void UpdateParam(struct TwoLayerNeuralNetwork * nn, float learning_rate) {
   }
   return;
 }
+
+/// @brief 计算精度
+/// @param x_train 训练数据集中的图像数据
+/// @param t_rain 训练数据集中的标签数据
+/// @return 精度
+float Accuracy(struct TwoLayerNeuralNetwork *nn, float *image, uint8_t *label,
+  int size) {
+  float y[60000 * 10];
+  // 计算预测值
+  for (int i = 0; i < size; i++) {
+    // 把nn中输入层的输入信号替换掉
+    for (int j = 0; j < 784; j++) {
+      nn->x[j] = image[i * 784 + j];
+    }
+    Predict(nn);
+    for (int j = 0; j < 10; j++) {
+      y[i * 10 + j] = nn->y[j];
+    }
+  }
+  // 从y[]中找出最大值并赋给max_y[]
+  int max_y[60000];
+  float max;
+  for (int i = 0; i < size; i++) {
+    max_y[i] = 0;
+    max = y[i * 10];
+    for (int j = 0; j < 10; j++) {
+      if (y[i * 10 + j] > max) {
+        max = y[i * 10 + j];
+        max_y[i] = j;
+      }
+    }
+  }
+  // 计算准确率
+  float correct = 0;
+  for (int i = 0; i < size; i++) {
+    if (label[i * 10 + max_y[i]] == 1)
+      correct++;
+  }
+  return (float)(correct / size);
+}

@@ -13,8 +13,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-void SaveStudyRecord(char * data);
+void SaveRecord(char *data, char *file_name);
 
 #endif  // EXPORT_DATA_SRC_EXPORT_DATA_H_
